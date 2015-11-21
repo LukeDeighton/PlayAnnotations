@@ -110,6 +110,7 @@ class FormImpl(val c: blackbox.Context) {
     }
 
     composeValidateWith(mapping)
+    composeConfirm(mapping)
   }
 
   /**
@@ -130,6 +131,12 @@ class FormImpl(val c: blackbox.Context) {
           $m.verifying($term.errorMsg, x => $term.isValid(x))
         }
       """
+    }
+  }
+
+  def composeConfirm(mapping: Tree)(implicit annotations: List[Annotation]): Tree = {
+    findAnnotation(typeOf[Confirm]).foldLeft(mapping) { (m, args) =>
+      q"confirm(..${m :: args})"
     }
   }
 
@@ -181,6 +188,7 @@ class FormImpl(val c: blackbox.Context) {
       import play.api.data.Forms._
       import com.lukedeighton.play.validation._
       import com.lukedeighton.play.validation.Binders._
+      import com.lukedeighton.play.validation.Mappings._
 
       Form($mapping)
     """
