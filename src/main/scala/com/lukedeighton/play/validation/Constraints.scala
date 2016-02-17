@@ -86,9 +86,8 @@ object Constraints {
    * '''name'''[constraint.pattern(regex)] or defined by the name parameter.
    * '''error'''[error.pattern(regex)] or defined by the error parameter.
    */
-  def pattern(regex: => scala.util.matching.Regex, name: String = "constraint.pattern", error: String = "error.pattern"): Constraint[String] = Constraint[String](name, () => regex) { o =>
+  def pattern(regex: => scala.util.matching.Regex, error: String = "error.pattern"): Constraint[String] = Constraint[String]("constraint.pattern", () => regex) { o =>
     require(regex != null, "regex must not be null")
-    require(name != null, "name must not be null")
     require(error != null, "error must not be null")
 
     if (o == null) Invalid(ValidationError(error, regex)) else regex.unapplySeq(o).map(_ => Valid).getOrElse(Invalid(ValidationError(error, regex)))

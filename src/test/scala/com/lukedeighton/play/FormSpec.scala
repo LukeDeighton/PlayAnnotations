@@ -34,6 +34,11 @@ class FormSpec extends BaseSpec {
     assert(invalidForm1.error("f").get.message == "error.real")
   }
 
+  "A form with filled required fields" should "validate successfully" in {
+    val form = test1Form.bind(Map("a" -> "2", "b" -> "2", "c" -> "2", "d" -> "2", "e" -> "2.5", "f" -> "2.5", "g" -> "g"))
+    assert(!form.hasErrors)
+  }
+
   "A Form with minimum values" should "show the default message error.min for every Test4 parameter" in {
     assert(minForm4.error("a").get.message == "error.min")
     assert(minForm4.error("b").get.message == "error.min")
@@ -50,6 +55,11 @@ class FormSpec extends BaseSpec {
     assert(maxForm4.error("d").get.message == "error.max")
     assert(maxForm4.error("e").get.message == "error.max")
     assert(maxForm4.error("f").get.message == "error.max")
+  }
+
+  it should "validate successfully when a value is lower than the maximum" in {
+    val form = test4Form.bind(Map("a" -> "11", "b" -> "11", "c" -> "11", "d" -> "11", "e" -> "12.5", "f" -> "12.5", "g" -> "g"*11))
+    assert(!form.hasErrors)
   }
 
   it should "show the default message error.minLength for Test5's String parameter" in {

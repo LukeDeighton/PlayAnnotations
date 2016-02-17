@@ -43,18 +43,51 @@ class AnnotationSpec extends BaseSpec {
   }
 
   /* MinLength */
-  it should "show a custom min length message for Test5's String parameter" in {
+  "A Form with minimum length values" should "show a custom min length message for Test5's String parameter" in {
     assert(minForm5.error("g").get.message == "MIN G")
   }
 
   /* MaxLength */
-  it should "show a custom max length message for Test5's String parameter" in {
+  "A Form with maximum length values" should "show a custom max length message for Test5's String parameter" in {
     assert(maxForm5.error("g").get.message == "MAX G")
   }
 
   /* Email */
+  "A Form with an email annotated field" should "accept test@test.com" in {
+    val validForm = test6Form.bind(Map("a" -> "test@test.com"))
+    assert(!validForm.hasErrors)
+  }
+
+  it should "not accept test@test" in {
+    val validForm = test6Form.bind(Map("a" -> "test"))
+    assert(validForm.hasErrors)
+  }
+
+  it should "have a custom error message for Test6's parameter" in {
+    val invalidForm = test6Form.bind(Map("a" -> "test"))
+    assert(invalidForm.error("a").get.message == "EMAIL A")
+  }
 
   /* Pattern */
+  "A Form with a pattern annotated field [abc]{5,8}" should "accept aabbcc" in {
+    val validForm = test7Form.bind(Map("a" -> "aabbcc"))
+    assert(!validForm.hasErrors)
+  }
+
+  it should "not accept aabb" in {
+    val invalidForm = test7Form.bind(Map("a" -> "aabb"))
+    assert(invalidForm.hasErrors)
+  }
+
+  it should "not accept bbccdd" in {
+    val invalidForm = test7Form.bind(Map("a" -> "bbccdd"))
+    assert(invalidForm.hasErrors)
+  }
+
+  it should "have a custom error message for Test6's b paramter" in {
+    val validForm = test7Form.bind(Map("a" -> "bbccdd"))
+    assert(validForm.error("a").get.message == "PATTERN A")
+  }
 
   /* ValidateWith */
 }

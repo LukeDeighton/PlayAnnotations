@@ -43,6 +43,11 @@ class FormImpl(val c: blackbox.Context) {
     findAnnotation(tpe).map(treeConverter)
   }
 
+  def regexConverter(constraint: Tree): List[Tree] => Tree = args => {
+    val argsUpdated = args.updated(0, q"${args.head}.r")
+    q"$constraint(..$argsUpdated)"
+  }
+
   def basicConverter(constraint: Tree): List[Tree] => Tree = args => q"$constraint(..$args)"
 
   def numberConverter(constraint: Tree, desiredTpe: Type): List[Tree] => Tree = { args =>
@@ -149,7 +154,9 @@ class FormImpl(val c: blackbox.Context) {
   def stringMapping(implicit annotations: List[Annotation]): Tree = {
     compose(of(q"string", requiredMsgArg().toList),
       typeOf[MinLength] -> basicConverter(q"Constraints.minLength"),
-      typeOf[MaxLength] -> basicConverter(q"Constraints.maxLength"))
+      typeOf[MaxLength] -> basicConverter(q"Constraints.maxLength"),
+      typeOf[Email] -> basicConverter(q"Constraints.emailAddress"),
+      typeOf[Pattern] -> regexConverter(q"Constraints.pattern"))
   }
 
   def optionalMapping(tpe: Type)(implicit annotations: List[Annotation]): Tree = {

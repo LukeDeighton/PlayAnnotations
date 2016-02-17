@@ -94,3 +94,13 @@ case class Test5(
   @MaxLength(15, "MAX G")
   g: String
 )
+
+case class Test6(
+  @Email("EMAIL A")
+  a: String
+)
+
+case class Test7(
+  @Pattern("[abc]{5,8}", "PATTERN A")
+  a: String
+)
