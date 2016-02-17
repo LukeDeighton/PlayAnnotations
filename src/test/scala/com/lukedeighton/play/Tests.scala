@@ -1,6 +1,7 @@
 package com.lukedeighton.play
 
 import com.lukedeighton.play.annotation._
+import com.lukedeighton.play.validation.Validator
 
 case class Test1(a: Long, b: Int, c: Short, d: Byte, e: Float, f: Double, g: String)
 
@@ -103,4 +104,25 @@ case class Test6(
 case class Test7(
   @Pattern("[abc]{5,8}", "PATTERN A")
   a: String
+)
+
+class OddNumber extends Validator[Int] {
+  override def isValid(n: Int): Boolean = n % 2 != 0
+}
+
+object OddNumber {
+  def apply(): OddNumber = {
+    new OddNumber
+  }
+}
+
+case class Test8(
+  @ValidateWith[String](a => a.contains("test"), "VALIDATE WITH A")
+  a: String,
+
+  @ValidateWith((b: Int) => b % 2 == 0)
+  b: Int,
+
+  @ValidateWith(OddNumber())
+  c: Int
 )

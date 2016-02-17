@@ -114,8 +114,7 @@ class FormImpl(val c: blackbox.Context) {
         objectMapping(tpe)
     }
 
-    composeValidateWith(mapping)
-    composeConfirm(mapping)
+    composeConfirm(composeValidateWith(mapping))
   }
 
   /**

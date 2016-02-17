@@ -69,6 +69,4 @@ class FormSpec extends BaseSpec {
   it should "show the default message error.maxLength for Test5's String parameter" in {
     assert(maxForm4.error("g").get.message == "error.maxLength")
   }
-
-  //TODO valid forms
  }

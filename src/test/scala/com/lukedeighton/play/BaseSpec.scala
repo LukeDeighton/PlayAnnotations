@@ -11,6 +11,7 @@ class BaseSpec extends FlatSpec {
   lazy val test5Form = form[Test5]
   lazy val test6Form = form[Test6]
   lazy val test7Form = form[Test7]
+  lazy val test8Form = form[Test8]
 
   lazy val emptyMap = Map.empty[String, String]
   lazy val emptyForm1 = test1Form.bind(emptyMap)

@@ -84,10 +84,38 @@ class AnnotationSpec extends BaseSpec {
     assert(invalidForm.hasErrors)
   }
 
-  it should "have a custom error message for Test6's b paramter" in {
+  it should "have a custom error message for Test6's b parameter" in {
     val validForm = test7Form.bind(Map("a" -> "bbccdd"))
     assert(validForm.error("a").get.message == "PATTERN A")
   }
 
   /* ValidateWith */
+  "A Form with a ValidateWith annotated String field" should "inline the validation successfully" in {
+    val invalidForm = test8Form.bind(Map("a" -> "a"))
+    assert(invalidForm.errors("a").nonEmpty)
+
+    val validForm = test8Form.bind(Map("a" -> "a test"))
+    assert(validForm.errors("a").isEmpty)
+  }
+
+  it should "have a custom error message for Test8's a parameter" in {
+    val invalidForm = test8Form.bind(Map("a" -> "a"))
+    assert(invalidForm.error("a").get.message == "VALIDATE WITH A")
+  }
+
+  "A Form with a ValidateWith annotated Int field" should "inline the validation successfully" in {
+    val invalidForm = test8Form.bind(Map("b" -> "3"))
+    assert(invalidForm.errors("b").nonEmpty)
+
+    val validForm = test8Form.bind(Map("b" -> "4"))
+    assert(validForm.errors("b").isEmpty)
+  }
+
+  "A Form with a ValidateWith annotated Int field" should "use a Validation object successfully" in {
+    val invalidForm = test8Form.bind(Map("c" -> "4"))
+    assert(invalidForm.errors("c").nonEmpty)
+
+    val validForm = test8Form.bind(Map("c" -> "3"))
+    assert(validForm.errors("c").isEmpty)
+  }
 }
